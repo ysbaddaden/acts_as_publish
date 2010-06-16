@@ -1,0 +1,41 @@
+ActsAsPublish
+=============
+
+This +acts_as+ extension provides the capabilities for publishing,
+unpublishing and prepublish objects. The class that has this
+specified needs to have a +published+ and +published_at+ columns
+defined as boolean and datetime respectively on the mapped database
+table.
+
+It creates the following scopes:
+
+- +published+
+- +unpublished+
+- +latest+
+
+Example
+=======
+
+ new_table :posts do |t|
+   t.string   :title
+   t.boolean  :published, :default => true
+   t.datetime :published_at
+ end
+
+ class Post < ActiveRecord::Base
+   acts_as_publish
+ end
+
+ @posts = Post.unpublished
+ @posts = Post.published.latest.limit(5)
+ 
+ @post = Post.create(:published => false, :published_at => Time.now - 1.year)
+ @post.published? # => false
+
+ @post = Post.create(:published => true, :published_at => Time.now - 1.year)
+ @post.published? # => true
+
+ @post = Post.create(:published => true, :published_at => Time.now + 1.year)
+ @post.published? # => false
+
+Copyright (c) 2010 Julien Portalier, released under the MIT license
