@@ -27,7 +27,7 @@ module ActiveRecord
               where(table_name + '.published = ? AND ' + table_name + '.published_at <= ?', true, Time.now) }
             scope :unpublished, Proc.new {
               where(table_name + '.published = ? OR ' + table_name + '.published_at > ?', false, Time.now) }
-            scope :latest, order('published_at DESC')
+            scope :latest, order(table_name + '.published_at DESC')
             
             before_create :set_publication_date
             
