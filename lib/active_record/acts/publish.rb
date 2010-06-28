@@ -24,9 +24,9 @@ module ActiveRecord
             include ActiveRecord::Acts::Publish::InstanceMethods
             
             scope :published, Proc.new {
-              where('published = ? AND published_at <= ?', true, Time.now) }
+              where(table_name + '.published = ? AND ' + table_name + '.published_at <= ?', true, Time.now) }
             scope :unpublished, Proc.new {
-              where('published = ? OR published_at > ?', false, Time.now) }
+              where(table_name + '.published = ? OR ' + table_name + '.published_at > ?', false, Time.now) }
             scope :latest, order('published_at DESC')
             
             before_create :set_publication_date
